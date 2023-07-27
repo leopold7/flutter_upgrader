@@ -38,17 +38,17 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     final Future<AppUpgradeInfo> appUpgradeInfo = Future.value(
                       AppUpgradeInfo(
-                        title: '更新提示',
-                        contents: ['有新版本哟,请更新～'],
-                        force: true,
-                      ),
+                          title: '更新提示',
+                          contents: ['有新版本哟,请更新～'],
+                          force: false,
+                          apkDownloadUrl:
+                              'https://download.gpttalk.work/GPT%20Talk-1.0.7-universal.dmg'),
                     );
 
                     if (Platform.isAndroid) {
                       AppUpgradeManager.upgrade(
                         context,
                         appUpgradeInfo,
-                        appMarketInfo: AppMarketManager.huaWei,
                       );
                     }
 
