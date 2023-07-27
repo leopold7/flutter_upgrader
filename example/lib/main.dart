@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_upgrader/flutter_upgrader.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
