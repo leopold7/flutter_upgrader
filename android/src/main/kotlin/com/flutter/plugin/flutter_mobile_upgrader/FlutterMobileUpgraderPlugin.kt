@@ -1,4 +1,4 @@
-package com.flutter.plugin.flutter_upgrader
+package com.flutter.plugin.flutter_mobile_upgrader
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -16,13 +16,13 @@ import io.flutter.plugin.common.MethodChannel.Result
 import java.io.File
 
 
-class FlutterUpgraderPlugin: FlutterPlugin, MethodCallHandler {
+class FlutterMobileUpgraderPlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var channel : MethodChannel
   private lateinit var mainContext: Context
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     mainContext = flutterPluginBinding.applicationContext
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_upgrader")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_mobile_upgrader")
     channel.setMethodCallHandler(this)
   }
 

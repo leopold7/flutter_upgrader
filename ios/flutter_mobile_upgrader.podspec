@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint flutter_upgrader.podspec` to validate before publishing.
+# Run `pod lib lint flutter_mobile_upgrader.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'flutter_upgrader'
+  s.name             = 'flutter_mobile_upgrader'
   s.version          = '1.0.7'
   s.summary          = 'A Flutter App Upgrader plugin.'
   s.description      = <<-DESC

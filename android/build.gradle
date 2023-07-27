@@ -1,4 +1,4 @@
-group 'com.flutter.plugin.flutter_upgrader'
+group 'com.flutter.plugin.flutter_mobile_upgrader'
 version '1.0-SNAPSHOT'
 
 buildscript {

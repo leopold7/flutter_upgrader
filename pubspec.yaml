@@ -1,6 +1,6 @@
-name: flutter_upgrader
+name: flutter_mobile_upgrader
 description: A user-friendly Flutter application upgrade plug-in, which supports both ios and android Welcome to use and feedback.
-homepage: https://github.com/linpengteng/flutter_upgrader
+homepage: https://github.com/CatalystClan/flutter_upgrader
 version: 1.0.7
 
 environment:
@@ -35,10 +35,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.flutter.plugin.flutter_upgrader
-        pluginClass: FlutterUpgraderPlugin
+        package: com.flutter.plugin.flutter_mobile_upgrader
+        pluginClass: FlutterMobileUpgraderPlugin
       ios:
-        pluginClass: FlutterUpgraderPlugin
+        pluginClass: FlutterMobileUpgraderPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

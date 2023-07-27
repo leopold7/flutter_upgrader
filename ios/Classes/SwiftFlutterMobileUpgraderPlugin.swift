@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-public class SwiftFlutterUpgraderPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterMobileUpgraderPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_upgrader", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterUpgraderPlugin()
+    let channel = FlutterMethodChannel(name: "flutter_mobile_upgrader", binaryMessenger: registrar.messenger())
+    let instance = SwiftFlutterMobileUpgraderPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

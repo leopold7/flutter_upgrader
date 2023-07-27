@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_upgrader/flutter_upgrader.dart';
+import 'package:flutter_mobile_upgrader/flutter_mobile_upgrader.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -41,8 +41,7 @@ class _MyAppState extends State<MyApp> {
                           title: '更新提示',
                           contents: ['有新版本哟,请更新～'],
                           force: false,
-                          apkDownloadUrl:
-                              'https://download.gpttalk.work/GPT%20Talk-1.0.7-universal.dmg'),
+                          apkDownloadUrl: ''),
                     );
 
                     if (Platform.isAndroid) {

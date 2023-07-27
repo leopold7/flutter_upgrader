@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_upgrader/flutter_upgrader.dart';
-import 'package:flutter_upgrader/flutter_upgrader_indicator.dart';
+import 'package:flutter_mobile_upgrader/flutter_mobile_upgrader.dart';
+import 'package:flutter_mobile_upgrader/flutter_mobile_upgrader_indicator.dart';
 
 // 升级提示 View
 class SimpleUpgradeViewWidget extends StatefulWidget {

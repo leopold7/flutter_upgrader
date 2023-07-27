@@ -1,6 +1,6 @@
-# flutter_upgrader_example
+# flutter_mobile_upgrader_example
 
-How to use the flutter_upgrader plugin.
+How to use the flutter_mobile_upgrader plugin.
 
 ## Getting Started
 
