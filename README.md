@@ -8,8 +8,8 @@
     dependencies:
       flutter_mobile_upgrader:
         git:
-        url: https://github.com/leopold7/flutter_upgrader.git
-        ref: main
+          url: https://github.com/leopold7/flutter_upgrader.git
+          ref: main
    ```
 
 2. 在命令行运行如下
