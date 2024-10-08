@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  final String apkDownloadUrl = '';
+  TextEditingController apkDownloadUrlController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +30,8 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              _buildInput(context),
+              const SizedBox(height: 20),
               _buildNormal(context),
               const SizedBox(height: 20),
               _buildBackMode(context),
@@ -38,6 +40,23 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  Widget _buildInput(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Expanded(
+          child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: TextField(
+                controller: apkDownloadUrlController,
+                decoration: const InputDecoration(
+                  hintText: '请输入apk下载地址',
+                ),
+                onChanged: (value) {
+                  apkDownloadUrlController.text = value;
+                },
+              ))),
+    ]);
   }
 
   Widget _buildNormal (BuildContext context) {
@@ -60,7 +79,7 @@ class _MyAppState extends State<MyApp> {
                   title: '更新提示',
                   contents: ['有新版本哟,请更新～'],
                   force: false,
-                  apkDownloadUrl: apkDownloadUrl),
+                  apkDownloadUrl: apkDownloadUrlController.text),
             );
 
             if (Platform.isAndroid) {
@@ -103,14 +122,14 @@ class _MyAppState extends State<MyApp> {
                   title: '更新提示',
                   contents: ['有新版本哟,请更新～'],
                   force: false,
-                  isBackground: true,
-                  apkDownloadUrl: apkDownloadUrl),
+                  apkDownloadUrl: apkDownloadUrlController.text),
             );
 
             if (Platform.isAndroid) {
               AppUpgradeManager.upgrade(
                 context,
                 appUpgradeInfo,
+                isBackground: true,
                 okText: '后台更新',
                 onOk: () async {
                   debugPrint('开始后台更新');

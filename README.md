@@ -6,7 +6,10 @@
 
    ```
     dependencies:
-      flutter_mobile_upgrader: ^1.0.7
+      flutter_mobile_upgrader:
+        git:
+        url: https://github.com/leopold7/flutter_upgrader.git
+        ref: main
    ```
 
 2. 在命令行运行如下
@@ -121,7 +124,7 @@
       AppUpgradeInfo(
         title: '更新提示',
         contents: ['有新版本哟,请更新～', '修复了设备定位bug', '优化认证操作体验'],
-        force: true, // 是否强制升级
+        force: false, // 是否强制升级
       ),
     );
 
@@ -129,6 +132,7 @@
     AppUpgradeManager.upgrade(
       context, // BuildContext
       appUpgradeInfo,
+      isBackground: true, // 是否后台下载
       apkDownloadUrl: 'http://xxx.xxx.com/upgrade.apk',
       onCancel: () {},
       onOk: () {},

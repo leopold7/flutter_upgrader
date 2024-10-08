@@ -21,6 +21,7 @@ class AppUpgradeManager {
     VoidCallback? onOk,
     DownloadProgressCallback? downloadProgress,
     DownloadStatusChangeCallback? downloadStatusChange,
+    bool isBackground = false,
   }) {
     future.then((AppUpgradeInfo appUpgradeInfo) {
       showDialog(
@@ -51,7 +52,7 @@ class AppUpgradeManager {
                   borderRadius: borderRadius,
                   downloadUrl: appUpgradeInfo.apkDownloadUrl,
                   force: appUpgradeInfo.force,
-                  isBackground: appUpgradeInfo.isBackground,
+                  isBackground: isBackground,
                   iosAppId: iosAppId,
                   appMarketInfo: appMarketInfo,
                   downloadProgress: downloadProgress,
@@ -93,16 +94,12 @@ class AppUpgradeInfo {
     required this.contents,
     this.apkDownloadUrl,
     this.force = false,
-    this.isBackground = false,
   });
 
   final String title;
   final List<String> contents;
   final String? apkDownloadUrl;
   final bool force;
-
-  // 后台更新
-  final bool isBackground;
 }
 
 // 下载进度回调
