@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_upgrader/flutter_mobile_upgrader.dart';
@@ -22,6 +23,7 @@ class SimpleUpgradeViewWidget extends StatefulWidget {
     this.borderRadius = 10,
     this.downloadUrl,
     this.force = false,
+    this.isBackground = false,
     this.iosAppId,
     this.appMarketInfo,
     this.onCancel,
@@ -72,6 +74,9 @@ class SimpleUpgradeViewWidget extends StatefulWidget {
   // 是否强制升级,设置true没有取消按钮
   final bool force;
 
+  // 是否后台更新，设置true后，点击更新按钮弹窗消失
+  final bool isBackground;
+
   // ios app id,用于跳转app store
   final String? iosAppId;
 
@@ -91,6 +96,11 @@ class SimpleUpgradeViewWidget extends StatefulWidget {
 class SimpleUpgradeViewWidgetState extends State<SimpleUpgradeViewWidget> {
   DownloadStatus _downloadStatus = DownloadStatus.none;
   double _downloadProgress = 0.0;
+
+  late BorderRadius borderRadius = BorderRadius.only(
+    bottomLeft: widget.force ? Radius.circular(widget.borderRadius) : Radius.zero,
+    bottomRight: Radius.circular(widget.borderRadius),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -116,23 +126,29 @@ class SimpleUpgradeViewWidgetState extends State<SimpleUpgradeViewWidget> {
   }
 
   // 下载处理
-  Future downloadApkHandler(String url, String path) async {
-    final isDoing = _downloadStatus == DownloadStatus.downloading;
-    final isStart = _downloadStatus == DownloadStatus.start;
-    final isDone = _downloadStatus == DownloadStatus.done;
-
-    if (isDoing || isStart || isDone) {
+  Future downloadApkHandler({required String url, required String path, bool isBackground = false}) async {
+    if (_downloadStatus == DownloadStatus.downloading || _downloadStatus == DownloadStatus.start || _downloadStatus == DownloadStatus.done) {
       debugPrint('当前下载状态：$_downloadStatus, 不能重复下载。');
       return;
     }
-
-    // start
     _downloadStatus = DownloadStatus.start;
     widget.downloadStatusChange?.call(_downloadStatus, error: null);
 
+    if (isBackground) {
+      // 启动后台下载
+      await _startBackgroundDownload(url, path);
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } else {
+      // 前台下载
+      await _startDownload(url, path);
+    }
+  }
+
+  Future<void> _startDownload(String url, String path) async {
     try {
-      await Dio().download(url, path,
-          onReceiveProgress: (int count, int total) {
+      await Dio().download(url, path, onReceiveProgress: (int count, int total) {
         if (total == -1) {
           _downloadProgress = 0.01;
         } else {
@@ -153,6 +169,46 @@ class SimpleUpgradeViewWidgetState extends State<SimpleUpgradeViewWidget> {
       _downloadProgress = 0;
       _downloadStatus = DownloadStatus.error;
       widget.downloadStatusChange?.call(DownloadStatus.error, error: e);
+    }
+  }
+
+  Future<void> _startBackgroundDownload(String url, String path) async {
+    final receivePort = ReceivePort();
+    await Isolate.spawn(_backgroundDownload, [receivePort.sendPort, url, path]);
+    receivePort.listen((message) {
+      if (message is double) {
+        if (mounted) {
+          setState(() {
+            _downloadProgress = message;
+            debugPrint('下载进度：$_downloadProgress');
+          });
+        }
+      } else if (message == 'done') {
+        _downloadStatus = DownloadStatus.done;
+        widget.downloadStatusChange?.call(DownloadStatus.done);
+        FlutterUpgradeChanneler.installAppForAndroid(path);
+      } else if (message is Exception) {
+        _downloadStatus = DownloadStatus.error;
+        widget.downloadStatusChange?.call(DownloadStatus.error, error: message);
+      }
+    });
+  }
+
+  static Future<void> _backgroundDownload(List<dynamic> args) async {
+    final sendPort = args[0] as SendPort;
+    final url = args[1] as String;
+    final path = args[2] as String;
+
+    try {
+      await Dio().download(url, path, onReceiveProgress: (int count, int total) {
+        if (total != -1) {
+          final progress = count / total.toDouble();
+          sendPort.send(progress);
+        }
+      });
+      sendPort.send('done');
+    } catch (e) {
+      sendPort.send(e);
     }
   }
 
@@ -223,17 +279,6 @@ class SimpleUpgradeViewWidgetState extends State<SimpleUpgradeViewWidget> {
 
   // 确定按钮
   _buildOkActionButton() {
-    var borderRadius = BorderRadius.only(
-      bottomRight: Radius.circular(widget.borderRadius),
-    );
-
-    if (widget.force) {
-      borderRadius = BorderRadius.only(
-        bottomRight: Radius.circular(widget.borderRadius),
-        bottomLeft: Radius.circular(widget.borderRadius),
-      );
-    }
-
     var okBackgroundColors = widget.okBackgroundColors?.length != 2
         ? [Theme.of(context).primaryColor, Theme.of(context).primaryColor]
         : widget.okBackgroundColors!;
@@ -275,7 +320,7 @@ class SimpleUpgradeViewWidgetState extends State<SimpleUpgradeViewWidget> {
           String name = 'app_download.apk';
           String path = await FlutterUpgradeChanneler.apkDownloadPath;
 
-          downloadApkHandler(widget.downloadUrl!, '$path/$name');
+          downloadApkHandler(url : widget.downloadUrl!, path: '$path/$name', isBackground: widget.isBackground);
         },
       ),
     );
