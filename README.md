@@ -1,3 +1,7 @@
+P.S.: 新增的功能
+
+* 支持后台下载
+
 一个 Flutter 应用升级插件, 支持 Android 和 IOS, 插件的构思和设计来均自于 [flutter_app_upgrade](https://github.com/LaoMengFlutter/flutter-do/tree/master/flutter_app_upgrade)
 
 # 安装
