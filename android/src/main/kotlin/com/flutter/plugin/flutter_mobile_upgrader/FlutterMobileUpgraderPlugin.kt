@@ -62,13 +62,13 @@ class FlutterMobileUpgraderPlugin: FlutterPlugin, MethodCallHandler {
       val packageInfo = it.packageManager.getPackageInfo(it.packageName, 0)
       val map = HashMap<String, String>()
 
+      // Handle nullability with safe calls and fallbacks
+      map["packageName"] = packageInfo.packageName ?: ""
+      map["versionName"] = packageInfo.versionName ?: ""
+
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        map["packageName"] = packageInfo.packageName
-        map["versionName"] = packageInfo.versionName
         map["versionCode"] = "${packageInfo.longVersionCode}"
       } else {
-        map["packageName"] = packageInfo.packageName
-        map["versionName"] = packageInfo.versionName
         map["versionCode"] = "${packageInfo.versionCode}"
       }
 
