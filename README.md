@@ -1,3 +1,7 @@
+P.S.: 新增的功能
+
+* 支持后台下载
+
 一个 Flutter 应用升级插件, 支持 Android 和 IOS, 插件的构思和设计来均自于 [flutter_app_upgrade](https://github.com/LaoMengFlutter/flutter-do/tree/master/flutter_app_upgrade)
 
 # 安装
@@ -8,8 +12,8 @@
     dependencies:
       flutter_mobile_upgrader:
         git:
-        url: https://github.com/leopold7/flutter_upgrader.git
-        ref: main
+          url: https://github.com/leopold7/flutter_upgrader.git
+          ref: main
    ```
 
 2. 在命令行运行如下
